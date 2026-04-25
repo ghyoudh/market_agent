@@ -4,21 +4,25 @@ FROM node:20-slim AS builder
 WORKDIR /app
 
 COPY frontend/package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY frontend/ .
 RUN npm run build
 
+# --- Runner stage using Next.js standalone output ---
 FROM node:20-slim AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/next.config.mjs ./
+ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
+
+# Copy the standalone server and static assets
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

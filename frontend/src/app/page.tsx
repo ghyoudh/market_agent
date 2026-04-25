@@ -5,12 +5,26 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Search, Download, Globe, CheckCircle2, Loader2, Target, Users, CreditCard, AlertCircle, Lightbulb } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface Competitor {
+  name: string;
+  market_share: string;
+  description: string;
+}
+
+interface MarketReport {
+  competitor_landscape: Competitor[];
+  value_proposition: { hook: string };
+  pricing_strategy: { type: string; details: string };
+  customer_pain_points: string[];
+  the_gap: string;
+}
+
 export default function MarketDashboard() {
-  const { t, language, setLanguage, isRtl } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"idle" | "searching" | "scraping" | "synthesizing" | "done">("idle");
-  const [report, setReport] = useState<any>(null);
+  const [report, setReport] = useState<MarketReport | null>(null);
 
   const toggleLanguage = () => {
     setLanguage(language === "en" ? "ar" : "en");
@@ -51,6 +65,19 @@ export default function MarketDashboard() {
     setReport(mockReport);
     setStep("done");
     setLoading(false);
+  };
+
+  const handleDownload = () => {
+    if (!report) return;
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `market_report_${query.replace(/\s+/g, '_')}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -152,9 +179,12 @@ export default function MarketDashboard() {
               <div className="flex justify-between items-end">
                 <div>
                   <h3 className="text-3xl font-bold mb-2">{t.reportTitle}</h3>
-                  <p className="text-slate-500">Analysis for: "{query}"</p>
+                  <p className="text-slate-500">Analysis for: &quot;{query}&quot;</p>
                 </div>
-                <button className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-indigo-500 transition-all font-bold shadow-sm">
+                <button 
+                  onClick={handleDownload}
+                  className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-indigo-500 transition-all font-bold shadow-sm"
+                >
                   <Download className="w-5 h-5" />
                   {t.download}
                 </button>
@@ -170,7 +200,7 @@ export default function MarketDashboard() {
                     <h4 className="text-xl font-bold">{t.competitors}</h4>
                   </div>
                   <div className="space-y-4 flex-1">
-                    {report.competitor_landscape.map((comp: any, idx: number) => (
+                    {report.competitor_landscape.map((comp: Competitor, idx: number) => (
                       <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                         <div className="flex justify-between items-center mb-1">
                           <span className="font-bold text-lg">{comp.name}</span>

@@ -19,7 +19,7 @@ def scrape_competitor(url: str) -> str:
     return json.dumps(result, indent=2)
 
 @mcp.tool()
-def finalize_report(report_json: str, filename: str = None) -> str:
+def finalize_report(report_json: str, filename: str | None = None) -> str:
     """
     Finalize and save the market report to a file.
     Takes a JSON string of the synthesized report.
