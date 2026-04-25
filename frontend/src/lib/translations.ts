@@ -1,0 +1,40 @@
+export const translations = {
+  en: {
+    title: "Market Intelligence Agent",
+    subtitle: "Transform vague queries into structured reports",
+    placeholder: "Enter a market query (e.g., Who are the top 3 players in AI CRM?)",
+    analyze: "Analyze Market",
+    searching: "Searching the web...",
+    scraping: "Extracting competitor data...",
+    synthesizing: "Synthesizing findings...",
+    reportTitle: "Market Analysis Report",
+    competitors: "Competitor Landscape",
+    valueProp: "Value Proposition",
+    pricing: "Pricing Strategy",
+    painPoints: "Customer Pain Points",
+    gap: "The Opportunity Gap",
+    download: "Download Report",
+    language: "العربية",
+    dir: "ltr",
+  },
+  ar: {
+    title: "وكيل ذكاء السوق",
+    subtitle: "حول الاستفسارات الغامضة إلى تقارير منظمة",
+    placeholder: "أدخل استفساراً عن السوق (مثلاً: من هم أفضل 3 لاعبين في إدارة علاقات العملاء بالذكاء الاصطناعي؟)",
+    analyze: "تحليل السوق",
+    searching: "جاري البحث في الويب...",
+    scraping: "جاري استخراج بيانات المنافسين...",
+    synthesizing: "جاري تلخيص النتائج...",
+    reportTitle: "تقرير تحليل السوق",
+    competitors: "مشهد المنافسين",
+    valueProp: "مقترح القيمة",
+    pricing: "استراتيجية التسعير",
+    painPoints: "نقاط الألم لدى العملاء",
+    gap: "فجوة الفرصة",
+    download: "تحميل التقرير",
+    language: "English",
+    dir: "rtl",
+  }
+};
+
+export type Language = 'en' | 'ar';
